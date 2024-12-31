@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/YutoOkawa/GenshinSkillChecker/pkg/skillchecker"
+	"github.com/manifoldco/promptui"
 )
 
 func main() {
@@ -19,7 +20,21 @@ func main() {
 		panic(err)
 	}
 
-	for _, character := range characters {
-		fmt.Print(character)
+	characterPrompt := promptui.Select{
+		Label: "キャラクターを選択してください",
+		Items: func() []string {
+			var items []string
+			for _, character := range characters {
+				items = append(items, character.CharacterName)
+			}
+			return items
+		}(),
 	}
+
+	_, characterName, err := characterPrompt.Run()
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(characterName)
 }
